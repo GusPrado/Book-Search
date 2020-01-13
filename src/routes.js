@@ -1,12 +1,10 @@
 import { Router } from 'express';
-import Book from './app/models/Book';
+
+import BookController from './app/controllers/BookController';
 
 const routes = new Router();
 
-routes.get('/', async (req, res) => {
-  const book = await Book.findAll({});
-
-  res.json(book);
-});
+routes.get('/', BookController.index);
+routes.get('/busca', BookController.show);
 
 export default routes;
