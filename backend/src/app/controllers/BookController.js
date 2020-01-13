@@ -39,13 +39,18 @@ class BookController {
     if (key && interval) {
       // if (typeof key === 'string' && interval) {
       const { page = 1 } = req.query;
+      let isbn = key;
+      if (isNaN(parseFloat(isbn))) {
+        isbn = 0;
+      }
       const { count, rows: books } = await Book.findAndCountAll({
         where: Sequelize.and(
           { year: { [Op.gte]: year_start } },
           { year: { [Op.lte]: year_end } },
           Sequelize.or(
             { title: { [Op.like]: `%${key}%` } },
-            { author: { [Op.like]: `%${key}%` } }
+            { author: { [Op.like]: `%${key}%` } },
+            { isbn }
           )
         ),
         limit: 10,
@@ -61,7 +66,6 @@ class BookController {
         res.json(search);
       }
     } else if (key && !interval) {
-      console.log('key sem intervalo');
       const { page = 1 } = req.query;
       let isbn = key;
       if (isNaN(parseFloat(isbn))) {
