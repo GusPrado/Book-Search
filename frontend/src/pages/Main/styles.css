@@ -1,0 +1,29 @@
+/**
+ * Copyright (c) 2020 gusprado
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+.book-list {
+  max-width: 900px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+}
+
+.book-list article {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.book-list .actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.book-list .actions button {
+  padding: 10px;
+  font-size: 14px;
+}
