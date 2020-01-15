@@ -1,14 +1,16 @@
 import Sequelize, { Op } from 'sequelize';
 import Book from '../models/Book';
 
+const pageLimit = 10;
 class BookController {
   async index(req, res) {
     const { page = 1 } = req.query;
     const { count, rows: books } = await Book.findAndCountAll({
-      limit: 10,
-      offset: (page - 1) * 10
+      limit: pageLimit,
+      offset: (page - 1) * pageLimit
     });
-    const search = { count, books };
+    const pages = Math.ceil(count / pageLimit);
+    const search = { books, count, pageLimit, pages, page };
     res.json(search);
   }
 
@@ -29,10 +31,11 @@ class BookController {
           { year: { [Op.gte]: year_start } },
           { year: { [Op.lte]: year_end } }
         ),
-        limit: 10,
-        offset: (page - 1) * 10
+        limit: pageLimit,
+        offset: (page - 1) * pageLimit
       });
-      const search = { count, books };
+      const pages = Math.ceil(count / pageLimit);
+      const search = { books, count, pageLimit, pages, page };
       res.json(search);
     }
 
@@ -53,10 +56,11 @@ class BookController {
             { isbn }
           )
         ),
-        limit: 10,
-        offset: (page - 1) * 10
+        limit: pageLimit,
+        offset: (page - 1) * pageLimit
       });
-      const search = { count, books };
+      const pages = Math.ceil(count / pageLimit);
+      const search = { books, count, pageLimit, pages, page };
 
       if (search.count === 0) {
         res.json(
@@ -77,10 +81,11 @@ class BookController {
           { author: { [Op.like]: `%${key}%` } },
           { isbn }
         ),
-        limit: 10,
-        offset: (page - 1) * 10
+        limit: pageLimit,
+        offset: (page - 1) * pageLimit
       });
-      const search = { count, books };
+      const pages = Math.ceil(count / pageLimit);
+      const search = { books, count, pageLimit, pages, page };
 
       if (search.count === 0) {
         res.json(`Nenhum resultado de ${key} encontrado`);

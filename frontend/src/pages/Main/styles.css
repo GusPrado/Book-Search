@@ -5,25 +5,29 @@
  * https://opensource.org/licenses/MIT
  */
 
-.book-list {
+.book-table {
   max-width: 900px;
   margin: 20px auto 0;
-  padding: 0 20px;
 }
 
-.book-list article {
-  border: 1px solid #ddd;
-  padding: 20px;
-  margin-bottom: 20px;
+.book-table table {
+  table-layout: auto;
+  width: 100%;
+  border: 1px solid #222;
 }
 
-.book-list .actions {
+.book-table .actions {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin: 50px 0 20px 0;
 }
 
-.book-list .actions button {
+.book-table .actions button {
   padding: 10px;
   font-size: 14px;
+}
+
+.book-table .actions button[disabled]{
+  opacity: 0.5;
+  cursor: default;
 }

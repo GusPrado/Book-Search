@@ -7,40 +7,77 @@ import './styles.css';
 export default class Main extends Component {
   state = {
     books: [],
+    pageInfo: {},
+    page: 1,
   };
 
   componentDidMount() {
     this.loadBooks();
   }
 
-  loadBooks = async () => {
-    const response = await api.get('/');
+  loadBooks = async (page = 1) => {
+    const response = await api.get(`/?page=${page}`);
 
-    this.setState({ books: response.data.books });
+    const { books, ...pageInfo } = response.data;
+
+    this.setState({ books, pageInfo, page });
   };
 
-  prevPage = () => {};
+  prevPage = () => {
+    const { page } = this.state;
 
-  nextPage = () => {};
+    if (page === 1) return;
+
+    const pageNumber = page - 1;
+
+    this.loadBooks(pageNumber);
+  };
+
+  nextPage = () => {
+    const { page, pageInfo } = this.state;
+
+    if (page === pageInfo.pages) return;
+
+    const pageNumber = page + 1;
+
+    this.loadBooks(pageNumber);
+  };
 
   render() {
-    const { books } = this.state;
+    const { books, page, pageInfo } = this.state;
 
     return (
-      <div className="book-list">
-        {books.map(book => (
-          <article key={book.id}>
-            <span>{book.title}</span>
-            <span>{book.isbn}</span>
-            <span>{book.author}</span>
-            <span>{book.pubcompany}</span>
-            <span>{book.year}</span>
-            <a href="#">Detalhes</a>
-          </article>
-        ))}
+      <div className="book-table">
+        <table>
+          <tr>
+            <th>Título/ISBN</th>
+            <th>Autor</th>
+            <th>Editora</th>
+            <th>Ano</th>
+            <th>Ações</th>
+          </tr>
+
+          {books.map(book => {
+            return (
+              <tr>
+                <td>{book.title}</td>
+                <td>{book.author}</td>
+                <td>{book.pubcompany}</td>
+                <td>{book.year}</td>
+                <td>
+                  <a href="#">Detalhes</a>
+                </td>
+              </tr>
+            );
+          })}
+        </table>
         <div className="actions">
-          <button onClick={this.prevPage}>Anterior</button>
-          <button onClick={this.nextPage}>Próximo</button>
+          <button disabled={page === 1} onClick={this.prevPage}>
+            Anterior
+          </button>
+          <button disabled={page === pageInfo.pages} onClick={this.nextPage}>
+            Próximo
+          </button>
         </div>
       </div>
     );
