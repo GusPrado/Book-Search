@@ -13,7 +13,7 @@ class BookController {
   }
 
   async show(req, res) {
-    const { key, year_start, year_end } = req.body;
+    const { key, year_start, year_end } = req.query;
     const interval = year_start && year_end;
 
     if (interval && year_end < year_start) {
